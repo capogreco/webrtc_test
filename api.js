@@ -1,5 +1,4 @@
 export const handle_api = async (req, path_array) => {
-   const type = path_array[1]
 
    const bc = new BroadcastChannel (`program`)
    const db = await Deno.openKv ()
@@ -35,8 +34,6 @@ export const handle_api = async (req, path_array) => {
       }) } \n\n`)
 
       bc.onmessage = async e => {
-
-         console.log (`bc: ${ e.data }`)
          if (e.data === `new_synth_answer`) {
             const offer = await get_offer ()
             const payload = JSON.stringify ({
@@ -47,9 +44,10 @@ export const handle_api = async (req, path_array) => {
          }
 
          if (e.data.startsWith (`new_synth_ice`)) {
+            const candidate = JSON.stringify (e.data.slice (15))
             const payload = JSON.stringify ({
                type: `new_synth_ice`,
-               candidate: e.data.slice (15),
+               candidate: JSON.parse (candidate),
             })
             controller.enqueue (`data: ${ payload } \n\n`)
          }
@@ -120,7 +118,6 @@ export const handle_api = async (req, path_array) => {
       },
 
       answer: async () => {
-         console.log (`synth_answer`)
          const { offer } = await req.json ()
          const { ok } = await db.set ([ `offer` ], offer)
          if (ok) bc.postMessage (`new_synth_answer`)
@@ -137,7 +134,8 @@ export const handle_api = async (req, path_array) => {
          }
          offer.synth.ice_candidates.push (new_candidate)
          const { ok } = await db.set ([ `offer` ], offer)
-         if (ok) bc.postMessage (`new_synth_ice: ${ new_candidate }`)
+         const str = JSON.stringify (new_candidate)
+         if (ok) bc.postMessage (`new_synth_ice: ${ str }`)
          return new Response ()
       },
    }

@@ -74,7 +74,9 @@ es.onmessage = async e => {
 
    if (type === `new_synth_ice`) {
       console.log (`new synth ice candidate`)
-      await pc.addIceCandidate (json.candidate)
+      const { candidate } = json
+      const candidate_obj = JSON.parse (candidate)
+      await pc.addIceCandidate (candidate_obj)
    }
    // console.dir (`es:`, payload)
 }
@@ -92,8 +94,6 @@ pc.ontrack = e => {
       vid.controls = true
       vid.srcObject = new MediaStream ([ track ])
       document.body.appendChild (vid)
-      console.dir (vid)
-
       // remote_stream.addTrack (track, remote_stream)
    })
 }
