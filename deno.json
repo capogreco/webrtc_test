@@ -1,0 +1,5 @@
+{
+   "tasks": {
+      "start": "deno run --allow-net --allow-read --unstable-kv --unstable-broadcast-channel --watch server.js"
+   }
+}
