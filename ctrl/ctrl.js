@@ -76,6 +76,7 @@ es.onmessage = async e => {
       console.log (`new synth ice candidate`)
       const { candidate } = json
       const candidate_obj = JSON.parse (candidate)
+      console.dir (candidate_obj)
       await pc.addIceCandidate (candidate_obj)
    }
    // console.dir (`es:`, payload)
