@@ -20,6 +20,11 @@ const pc = new RTCPeerConnection({
          `stun:stun.l.google.com:19302`,
          `stun:stun1.l.google.com:19302`,
       ]
+   },
+   {
+      urls: `turn:relay1.expressturn.com:3478`,
+      username: `efHJ00NFBZ7WNHH14V`,
+      credential: `MimOtmZhrs63A5Na`
    } ]
 })
 
